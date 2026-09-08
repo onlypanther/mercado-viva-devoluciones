@@ -5,15 +5,15 @@ Un cliente solicita la devolución desde la web, recibe un código con vigencia 
 y lo presenta en cualquier tienda física, donde un asesor verifica el producto y cierra
 el caso con trazabilidad completa.
 
-- **Aplicación publicada:** `PENDIENTE — pegue aquí la URL de Vercel`
-- **API publicada:** `PENDIENTE — pegue aquí la URL de Render`
-- **Documentación interactiva de la API:** la URL de Render seguida de `/docs`
+- **Aplicación publicada:** https://mercado-viva-devoluciones.vercel.app
+- **API publicada:** https://mercado-viva-devoluciones.onrender.com
+- **Documentación interactiva de la API:** https://mercado-viva-devoluciones.onrender.com/docs
 
 ## Integrantes
 
 | Nombre | Rol en el trabajo |
 |---|---|
-| _Pendiente_ | Definición del proceso, arquitectura, desarrollo y despliegue |
+|Jhair Andres Santamaria Arias | Definición del proceso, arquitectura, desarrollo y despliegue |
 
 ---
 
