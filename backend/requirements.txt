@@ -1,0 +1,12 @@
+# Se usan rangos y no versiones exactas: fijar una version concreta hace que
+# la instalacion falle en cuanto el proyecto se abre en otra version de Python.
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.34
+sqlalchemy>=2.0.36,<3.0
+psycopg[binary]>=3.2.10
+pydantic[email]>=2.10
+PyJWT>=2.10
+bcrypt>=4.2
+python-dotenv>=1.0
+pytest>=8.3
+httpx>=0.28

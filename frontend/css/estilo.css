@@ -1,0 +1,276 @@
+/* ==========================================================================
+   Mercado VIVA - Devoluciones omnicanal
+   Sistema visual: el codigo de devolucion es un talon desprendible.
+   ========================================================================== */
+
+:root {
+  --tinta:        #16211c;
+  --tinta-suave:  #55635c;
+  --papel:        #ffffff;
+  --fondo:        #f2f4f0;
+  --linea:        #d7ddd4;
+  --verde:        #1b7a4b;
+  --verde-hondo:  #115936;
+  --verde-claro:  #e3f0e8;
+  --ambar:        #a8690b;
+  --ambar-claro:  #fbf0dc;
+  --rojo:         #a32c2c;
+  --rojo-claro:   #fbe8e6;
+
+  --radio:   10px;
+  --sombra:  0 1px 2px rgba(22, 33, 28, .06);
+  --ancho:   980px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .4rem; font-weight: 600; }
+h1 { font-size: 1.6rem; letter-spacing: -.015em; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+p  { margin: 0 0 .8rem; max-width: 62ch; }
+
+a { color: var(--verde-hondo); }
+
+/* --- Estructura --------------------------------------------------------- */
+.barra {
+  background: var(--tinta);
+  color: #eef2ee;
+  padding: .7rem 1.25rem;
+}
+.barra__interior {
+  max-width: var(--ancho);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.barra__marca { font-weight: 700; letter-spacing: -.01em; }
+.barra__marca span { font-weight: 400; opacity: .7; }
+.barra__usuario { margin-left: auto; font-size: .88rem; opacity: .85; }
+
+.lienzo { max-width: var(--ancho); margin: 0 auto; padding: 1.75rem 1.25rem 4rem; }
+
+.bloque { margin-bottom: 2rem; }
+.bloque__titulo { display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap; margin-bottom: .9rem; }
+.bloque__ayuda { color: var(--tinta-suave); font-size: .9rem; }
+
+.tarjeta {
+  background: var(--papel);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 1.25rem;
+}
+
+/* --- Formularios -------------------------------------------------------- */
+.campo { margin-bottom: 1rem; }
+.campo label { display: block; font-weight: 500; margin-bottom: .3rem; font-size: .95rem; }
+.campo__nota { color: var(--tinta-suave); font-size: .85rem; margin-top: .25rem; }
+
+input, textarea, select {
+  width: 100%;
+  padding: .65rem .8rem;
+  font: inherit;
+  color: inherit;
+  background: var(--papel);
+  border: 1px solid var(--linea);
+  border-radius: 8px;
+}
+textarea { resize: vertical; min-height: 5rem; }
+input:focus, textarea:focus, select:focus, button:focus-visible, a:focus-visible {
+  outline: 3px solid var(--verde);
+  outline-offset: 2px;
+}
+
+/* --- Botones ------------------------------------------------------------ */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  padding: .7rem 1.15rem;
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid var(--tinta);
+  border-radius: 8px;
+  background: var(--papel);
+  color: var(--tinta);
+  cursor: pointer;
+}
+.boton:hover { background: var(--fondo); }
+.boton:disabled { opacity: .5; cursor: not-allowed; }
+.boton--principal { background: var(--verde); border-color: var(--verde); color: #fff; }
+.boton--principal:hover { background: var(--verde-hondo); border-color: var(--verde-hondo); }
+.boton--peligro { background: var(--papel); border-color: var(--rojo); color: var(--rojo); }
+.boton--peligro:hover { background: var(--rojo-claro); }
+.boton--tenue { border-color: var(--linea); color: var(--tinta-suave); font-weight: 500; }
+.boton--ancho { width: 100%; }
+.boton--grande { padding: .95rem 1.5rem; font-size: 1.05rem; }
+
+/* --- Avisos ------------------------------------------------------------- */
+.aviso {
+  border: 1px solid var(--linea);
+  border-left-width: 4px;
+  border-radius: 8px;
+  padding: .85rem 1rem;
+  margin-bottom: 1.1rem;
+  font-size: .95rem;
+}
+.aviso[hidden] { display: none; }
+.aviso--error  { background: var(--rojo-claro);  border-color: var(--rojo);  border-left-color: var(--rojo); }
+.aviso--exito  { background: var(--verde-claro); border-color: var(--verde); border-left-color: var(--verde); }
+.aviso--espera { background: var(--ambar-claro); border-color: var(--ambar); border-left-color: var(--ambar); }
+.aviso__regla { display: block; margin-top: .3rem; font-size: .82rem; color: var(--tinta-suave); }
+
+/* --- Estados ------------------------------------------------------------ */
+.estado {
+  display: inline-block;
+  padding: .18rem .6rem;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 600;
+  border: 1px solid;
+}
+.estado--pendiente { background: var(--ambar-claro); color: var(--ambar); border-color: #e7cfa2; }
+.estado--aprobada  { background: var(--verde-claro); color: var(--verde-hondo); border-color: #b6d9c4; }
+.estado--rechazada { background: var(--rojo-claro);  color: var(--rojo); border-color: #e8bdb8; }
+.estado--expirada  { background: #eceee9; color: var(--tinta-suave); border-color: var(--linea); }
+
+/* --- Lista de pedidos: filas, no tarjetas repetidas ---------------------- */
+.pedido { background: var(--papel); border: 1px solid var(--linea); border-radius: var(--radio); margin-bottom: 1rem; overflow: hidden; }
+.pedido__cabecera {
+  display: flex; align-items: center; gap: .9rem; flex-wrap: wrap;
+  padding: .9rem 1.1rem; border-bottom: 1px solid var(--linea); background: #fafbf9;
+}
+.pedido__codigo { font-family: "Martian Mono", ui-monospace, "Courier New", monospace; font-size: .92rem; font-weight: 500; }
+.pedido__meta { color: var(--tinta-suave); font-size: .87rem; }
+.pedido__plazo { margin-left: auto; font-size: .85rem; font-weight: 600; color: var(--ambar); }
+
+.linea {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: .9rem;
+  align-items: center;
+  padding: .8rem 1.1rem;
+  border-top: 1px solid var(--linea);
+}
+.linea:first-of-type { border-top: 0; }
+.linea--bloqueada { background: #fafbf9; color: var(--tinta-suave); }
+.linea__nombre { font-weight: 500; }
+.linea__detalle { font-size: .85rem; color: var(--tinta-suave); }
+.linea__cantidad { width: 5.5rem; }
+.linea__motivo { font-size: .82rem; color: var(--ambar); max-width: 22ch; text-align: right; }
+
+/* --- El talon: unico elemento con peso visual --------------------------- */
+.talon {
+  position: relative;
+  background: var(--tinta);
+  color: #f4f7f3;
+  border-radius: var(--radio);
+  padding: 1.6rem 1.5rem;
+  margin: 1.2rem 0;
+  overflow: hidden;
+}
+.talon::before, .talon::after {
+  content: "";
+  position: absolute;
+  width: 26px; height: 26px;
+  background: var(--fondo);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.talon::before { left: -13px; }
+.talon::after  { right: -13px; }
+.talon__marco { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center; }
+@media (max-width: 620px) { .talon__marco { grid-template-columns: 1fr; } }
+.talon__rotulo { font-size: .82rem; opacity: .75; margin-bottom: .35rem; }
+.talon__codigo {
+  font-family: "Martian Mono", ui-monospace, "Courier New", monospace;
+  font-size: clamp(1.5rem, 6vw, 2.35rem);
+  font-weight: 600;
+  letter-spacing: .04em;
+  margin: 0;
+}
+.talon__vence { font-size: .87rem; opacity: .8; margin-top: .5rem; }
+.talon__monto { text-align: right; border-left: 1px dashed rgba(244, 247, 243, .35); padding-left: 1.5rem; }
+@media (max-width: 620px) {
+  .talon__monto { text-align: left; border-left: 0; padding-left: 0; border-top: 1px dashed rgba(244,247,243,.35); padding-top: 1rem; }
+}
+.talon__cifra { font-size: 1.45rem; font-weight: 700; }
+
+/* --- Buscador de la tienda: la pantalla es el campo --------------------- */
+.buscador { background: var(--papel); border: 1px solid var(--linea); border-radius: var(--radio); padding: 1.75rem; box-shadow: var(--sombra); }
+.buscador__fila { display: flex; gap: .75rem; flex-wrap: wrap; }
+.buscador input {
+  flex: 1 1 16rem;
+  font-family: "Martian Mono", ui-monospace, "Courier New", monospace;
+  font-size: 1.35rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .85rem 1rem;
+}
+
+.decision { display: flex; gap: .9rem; flex-wrap: wrap; margin-top: 1.2rem; }
+.decision .boton { flex: 1 1 12rem; }
+
+/* --- Datos en dos columnas ---------------------------------------------- */
+.datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 1rem 1.5rem; margin-bottom: 1.2rem; }
+.datos__rotulo { font-size: .82rem; color: var(--tinta-suave); }
+.datos__valor { font-weight: 600; }
+.datos__valor--mono { font-family: "Martian Mono", ui-monospace, monospace; font-weight: 500; font-size: .92rem; }
+
+/* --- Trazabilidad: es una secuencia, por eso lleva linea de tiempo ------- */
+.rastro { list-style: none; margin: 0; padding: 0 0 0 1.4rem; border-left: 2px solid var(--linea); }
+.rastro li { position: relative; padding-bottom: 1.05rem; }
+.rastro li:last-child { padding-bottom: 0; }
+.rastro li::before {
+  content: "";
+  position: absolute;
+  left: -1.4rem; top: .45rem;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--verde);
+  transform: translateX(-50%);
+}
+.rastro__cuando { font-size: .82rem; color: var(--tinta-suave); }
+.rastro__quien { font-size: .88rem; }
+
+/* --- Tabla del historial ------------------------------------------------ */
+.tabla { width: 100%; border-collapse: collapse; background: var(--papel); font-size: .93rem; }
+.tabla th, .tabla td { text-align: left; padding: .7rem .85rem; border-bottom: 1px solid var(--linea); vertical-align: top; }
+.tabla th { font-weight: 600; background: #fafbf9; }
+.tabla__mono { font-family: "Martian Mono", ui-monospace, monospace; font-size: .85rem; }
+.envoltura-tabla { overflow-x: auto; border: 1px solid var(--linea); border-radius: var(--radio); }
+
+/* --- Vacio y carga ------------------------------------------------------ */
+.vacio { background: var(--papel); border: 1px dashed var(--linea); border-radius: var(--radio); padding: 2.25rem 1.5rem; text-align: center; color: var(--tinta-suave); }
+.vacio h3 { color: var(--tinta); }
+
+.cargando { color: var(--tinta-suave); font-size: .93rem; padding: 1rem 0; }
+
+/* --- Entrada ------------------------------------------------------------ */
+.portada { min-height: 100vh; display: grid; place-items: center; padding: 1.5rem; }
+.portada__caja { width: 100%; max-width: 25rem; }
+.portada__titulo { margin-bottom: .25rem; }
+.portada__pie { margin-top: 1.4rem; padding-top: 1.1rem; border-top: 1px solid var(--linea); font-size: .85rem; color: var(--tinta-suave); }
+.portada__pie code { font-family: "Martian Mono", ui-monospace, monospace; font-size: .8rem; }
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

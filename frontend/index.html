@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Devoluciones · Mercado VIVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Martian+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+<main class="portada">
+  <div class="portada__caja">
+    <h1 class="portada__titulo">Mercado VIVA</h1>
+    <p class="bloque__ayuda" style="margin-bottom:1.4rem">Devoluciones de compras digitales en tienda física</p>
+
+    <div class="tarjeta">
+      <div id="aviso" class="aviso aviso--error" hidden></div>
+
+      <div class="campo">
+        <label for="email">Correo</label>
+        <input id="email" type="email" autocomplete="username" placeholder="cliente@viva.co">
+      </div>
+
+      <div class="campo">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" autocomplete="current-password">
+      </div>
+
+      <button id="entrar" class="boton boton--principal boton--ancho boton--grande">Entrar</button>
+
+      <div class="portada__pie">
+        Cuentas de demostración, todas con la contraseña <code>Viva2026*</code>:<br>
+        <code>cliente@viva.co</code> · <code>asesor@viva.co</code> · <code>admin@viva.co</code>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/sesion.js"></script>
+<script src="js/api.js"></script>
+<script>
+const boton = document.getElementById("entrar");
+
+async function entrar() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    mostrarAviso("aviso", "Escriba el correo y la contraseña.");
+    return;
+  }
+
+  ocultarAviso("aviso");
+  boton.disabled = true;
+  boton.textContent = "Entrando…";
+
+  try {
+    const datos = await Api.enviar("/api/auth/login", { email, password });
+    Sesion.guardar(datos.access_token, datos.usuario);
+    window.location.href = Sesion.paginaDeInicio(datos.usuario.rol);
+  } catch (error) {
+    mostrarAviso("aviso", error.message);
+    boton.disabled = false;
+    boton.textContent = "Entrar";
+  }
+}
+
+boton.addEventListener("click", entrar);
+document.querySelectorAll("input").forEach((campo) =>
+  campo.addEventListener("keydown", (e) => { if (e.key === "Enter") entrar(); }));
+
+// Si ya hay una sesion abierta, va directo a la pantalla que corresponde.
+if (Sesion.token() && Sesion.usuario()) {
+  window.location.href = Sesion.paginaDeInicio(Sesion.usuario().rol);
+}
+</script>
+</body>
+</html>

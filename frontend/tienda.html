@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulo de tienda · Mercado VIVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Martian+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+<header class="barra">
+  <div class="barra__interior">
+    <div class="barra__marca">Mercado VIVA <span>· Módulo de tienda</span></div>
+    <div class="barra__usuario"><span id="usuario-barra"></span></div>
+    <button id="salir" class="boton boton--tenue" style="padding:.35rem .75rem">Salir</button>
+  </div>
+</header>
+
+<main class="lienzo">
+  <div class="bloque__titulo">
+    <h1>Validar una devolución</h1>
+    <span class="bloque__ayuda">Pida al cliente el código que aparece en su pedido</span>
+  </div>
+
+  <div class="buscador">
+    <div class="buscador__fila">
+      <label class="sr" for="codigo">Código de devolución</label>
+      <input id="codigo" placeholder="DEV-XXXXXXXX" maxlength="12" autofocus
+             autocomplete="off" spellcheck="false" inputmode="latin">
+      <button id="buscar" class="boton boton--principal boton--grande">Buscar</button>
+    </div>
+  </div>
+
+  <div id="aviso" class="aviso" hidden style="margin-top:1.2rem"></div>
+
+  <section id="detalle" class="bloque" style="margin-top:1.5rem" hidden></section>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/sesion.js"></script>
+<script src="js/api.js"></script>
+<script src="js/tienda.js"></script>
+</body>
+</html>

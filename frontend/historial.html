@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Historial unificado · Mercado VIVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Martian+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+<header class="barra">
+  <div class="barra__interior">
+    <div class="barra__marca">Mercado VIVA <span>· Historial</span></div>
+    <div class="barra__usuario"><span id="usuario-barra"></span></div>
+    <button id="salir" class="boton boton--tenue" style="padding:.35rem .75rem">Salir</button>
+  </div>
+</header>
+
+<main class="lienzo">
+  <div class="bloque__titulo">
+    <h1>Historial unificado de devoluciones</h1>
+    <span class="bloque__ayuda">Todas las tiendas y todos los canales</span>
+  </div>
+
+  <div class="campo" style="max-width:20rem">
+    <label for="filtro">Filtrar por estado</label>
+    <select id="filtro">
+      <option value="">Todos los estados</option>
+      <option value="PENDIENTE_VALIDACION">Pendientes de validar</option>
+      <option value="APROBADA">Aprobadas</option>
+      <option value="RECHAZADA">Rechazadas</option>
+      <option value="EXPIRADA">Expiradas</option>
+    </select>
+  </div>
+
+  <div id="aviso" class="aviso" hidden></div>
+  <div id="resumen" class="datos" style="margin-bottom:1.2rem"></div>
+  <div id="tabla"><p class="cargando">Cargando…</p></div>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/sesion.js"></script>
+<script src="js/api.js"></script>
+<script src="js/historial.js"></script>
+</body>
+</html>

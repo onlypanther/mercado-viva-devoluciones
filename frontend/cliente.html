@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mis devoluciones · Mercado VIVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Martian+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+<header class="barra">
+  <div class="barra__interior">
+    <div class="barra__marca">Mercado VIVA <span>· Devoluciones</span></div>
+    <div class="barra__usuario"><span id="usuario-barra"></span></div>
+    <button id="salir" class="boton boton--tenue" style="padding:.35rem .75rem">Salir</button>
+  </div>
+</header>
+
+<main class="lienzo">
+  <div id="aviso" class="aviso" hidden></div>
+
+  <!-- El talon aparece aqui despues de crear la solicitud -->
+  <section id="zona-talon" hidden></section>
+
+  <section class="bloque">
+    <div class="bloque__titulo">
+      <h1>Pedidos que puede devolver</h1>
+      <span class="bloque__ayuda">Entregados hace 30 días o menos</span>
+    </div>
+    <div id="pedidos"><p class="cargando">Cargando sus pedidos…</p></div>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque__titulo">
+      <h2>Solicitudes anteriores</h2>
+    </div>
+    <div id="solicitudes"><p class="cargando">Cargando…</p></div>
+  </section>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/sesion.js"></script>
+<script src="js/api.js"></script>
+<script src="js/cliente.js"></script>
+</body>
+</html>

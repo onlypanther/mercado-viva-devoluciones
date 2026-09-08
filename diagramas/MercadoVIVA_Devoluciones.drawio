@@ -1,0 +1,205 @@
+<mxfile host="app.diagrams.net" agent="Claude" version="24.7.17" type="device">
+  <diagram id="proceso" name="1. Proceso de negocio">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="titulo" value="Mercado VIVA &#8212; Devolución de una compra digital en una tienda física" style="text;html=1;fontSize=20;fontStyle=1;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="900" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pool" value="Proceso de devolución omnicanal" style="swimlane;html=1;horizontal=0;startSize=30;fillColor=none;strokeColor=#333333;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="1740" height="700" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane_cli" value="Cliente digital" style="swimlane;html=1;horizontal=0;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="pool">
+          <mxGeometry x="30" y="0" width="1710" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_sis" value="Plataforma Mercado VIVA" style="swimlane;html=1;horizontal=0;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="pool">
+          <mxGeometry x="30" y="210" width="1710" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_ase" value="Asesor de tienda" style="swimlane;html=1;horizontal=0;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="pool">
+          <mxGeometry x="30" y="490" width="1710" height="210" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p_ini" value="Inicio" style="ellipse;html=1;fillColor=#ffffff;strokeColor=#333333;strokeWidth=2;fontSize=10;" vertex="1" parent="lane_cli">
+          <mxGeometry x="50" y="85" width="45" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p_c1" value="Inicia sesión y consulta&lt;br&gt;sus pedidos entregados" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="lane_cli">
+          <mxGeometry x="130" y="78" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="p_c2" value="Selecciona los ítems,&lt;br&gt;la cantidad y el motivo&lt;br&gt;de la devolución" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="lane_cli">
+          <mxGeometry x="330" y="78" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="p_c3" value="Recibe el código de&lt;br&gt;devolución y su&lt;br&gt;vencimiento (72 h)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="lane_cli">
+          <mxGeometry x="720" y="78" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="p_c4" value="Se presenta en la tienda&lt;br&gt;con el producto y el código" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="lane_cli">
+          <mxGeometry x="920" y="78" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p_s1" value="Autentica con JWT y devuelve&lt;br&gt;los pedidos elegibles&lt;br&gt;(estado ENTREGADO y ≤ 30 días)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_sis">
+          <mxGeometry x="130" y="50" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p_s2" value="¿Cumple las reglas&lt;br&gt;de elegibilidad?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_sis">
+          <mxGeometry x="520" y="45" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="p_s3" value="Rechaza (HTTP 422)&lt;br&gt;e informa la regla incumplida" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="lane_sis">
+          <mxGeometry x="520" y="170" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="p_fin1" value="Fin" style="ellipse;html=1;fillColor=#ffffff;strokeColor=#333333;strokeWidth=3;fontSize=10;" vertex="1" parent="lane_sis">
+          <mxGeometry x="720" y="177" width="45" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p_s4" value="Crea la solicitud en estado&lt;br&gt;PENDIENTE_VALIDACION&lt;br&gt;y genera un código único" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_sis">
+          <mxGeometry x="720" y="50" width="170" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p_s5" value="¿El código&lt;br&gt;está vigente?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_sis">
+          <mxGeometry x="1110" y="45" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="p_s6" value="Marca la solicitud&lt;br&gt;EXPIRADA (HTTP 410)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="lane_sis">
+          <mxGeometry x="1110" y="170" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="p_fin2" value="Fin" style="ellipse;html=1;fillColor=#ffffff;strokeColor=#333333;strokeWidth=3;fontSize=10;" vertex="1" parent="lane_sis">
+          <mxGeometry x="1310" y="177" width="45" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p_s8" value="Registra la transición con usuario,&lt;br&gt;fecha y motivo; calcula y autoriza&lt;br&gt;el reembolso si aplica;&lt;br&gt;cierra la solicitud" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" vertex="1" parent="lane_sis">
+          <mxGeometry x="1490" y="45" width="190" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="p_fin3" value="Fin" style="ellipse;html=1;fillColor=#ffffff;strokeColor=#333333;strokeWidth=3;fontSize=10;" vertex="1" parent="lane_sis">
+          <mxGeometry x="1562" y="180" width="45" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p_a1" value="Ingresa el código en el&lt;br&gt;módulo de tienda" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="lane_ase">
+          <mxGeometry x="920" y="78" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="p_a2" value="Verifica el producto físico&lt;br&gt;contra el detalle de la solicitud" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="lane_ase">
+          <mxGeometry x="1300" y="30" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="p_a3" value="¿El producto&lt;br&gt;está conforme?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_ase">
+          <mxGeometry x="1305" y="115" width="160" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;" edge="1" parent="1" source="p_ini" target="p_c1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" value="Credenciales" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="p_c1" target="p_s1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" value="Lista de pedidos elegibles" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="p_s1" target="p_c2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" value="Solicitud de devolución" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="p_c2" target="p_s2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="p_s2" target="p_s3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;" edge="1" parent="1" source="p_s3" target="p_fin1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e7" value="Sí" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="p_s2" target="p_s4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e8" value="Código + vencimiento" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="p_s4" target="p_c3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;" edge="1" parent="1" source="p_c3" target="p_c4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e10" value="Entrega el código" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="p_c4" target="p_a1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e11" value="Consulta por código" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="p_a1" target="p_s5"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e12" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="p_s5" target="p_s6"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;" edge="1" parent="1" source="p_s6" target="p_fin2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e14" value="Sí: muestra el detalle" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;fontStyle=1;" edge="1" parent="1" source="p_s5" target="p_a2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;" edge="1" parent="1" source="p_a2" target="p_a3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e16" value="Sí: aprueba" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;fontStyle=1;" edge="1" parent="1" source="p_a3" target="p_s8"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e17" value="No: rechaza con motivo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;fontStyle=1;dashed=1;" edge="1" parent="1" source="p_a3" target="p_s8"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;" edge="1" parent="1" source="p_s8" target="p_fin3"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <mxCell id="reglas" value="&lt;b&gt;Reglas de negocio aplicadas&lt;/b&gt;&lt;br&gt;R1. Solo pedidos en estado ENTREGADO.&lt;br&gt;R2. Máximo 30 días calendario desde la entrega.&lt;br&gt;R3. Se excluyen PERECEDEROS e HIGIENE_PERSONAL.&lt;br&gt;R4. Cantidad a devolver ≤ comprada − ya devuelta.&lt;br&gt;R5. Código único con vigencia de 72 horas.&lt;br&gt;R6. Solo el rol ASESOR aprueba o rechaza.&lt;br&gt;R7. Toda transición se registra; los estados no retroceden." style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="780" width="420" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="estados" value="&lt;b&gt;Máquina de estados de la solicitud&lt;/b&gt;&lt;br&gt;&lt;br&gt;PENDIENTE_VALIDACION → APROBADA (cierre con reembolso autorizado)&lt;br&gt;PENDIENTE_VALIDACION → RECHAZADA (cierre con motivo)&lt;br&gt;PENDIENTE_VALIDACION → EXPIRADA (código vencido, 72 h)&lt;br&gt;&lt;br&gt;Los estados APROBADA, RECHAZADA y EXPIRADA son finales." style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="490" y="780" width="470" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="objetivo" value="&lt;b&gt;Objetivo medible del MVP&lt;/b&gt;&lt;br&gt;&lt;br&gt;Atender una devolución en tienda en menos de 5 minutos,&lt;br&gt;con el 100 % de las solicitudes trazables mediante su&lt;br&gt;historial de estados.&lt;br&gt;&lt;br&gt;&lt;b&gt;Fuera del alcance:&lt;/b&gt; ejecución del reembolso (pasarela de pagos) e integración con el ERP." style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="990" y="780" width="470" height="140" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="arquitectura" name="2. Arquitectura y componentes">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="a_titulo" value="Mercado VIVA &#8212; Arquitectura del MVP de Devoluciones Omnicanal" style="text;html=1;fontSize=20;fontStyle=1;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="900" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="a_sub" value="Arquitectura cliente-servidor en tres capas, con backend monolítico modular desplegado en la nube" style="text;html=1;fontSize=12;align=left;verticalAlign=middle;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="48" width="900" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_actores" value="Actores externos" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontSize=12;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="180" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="a_cli" value="&lt;b&gt;Cliente digital&lt;/b&gt;&lt;br&gt;&lt;br&gt;Crea la solicitud desde&lt;br&gt;el navegador web o móvil" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="150" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ase" value="&lt;b&gt;Asesor de tienda&lt;/b&gt;&lt;br&gt;&lt;br&gt;Valida el producto físico&lt;br&gt;desde un equipo compartido" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="270" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="a_adm" value="&lt;b&gt;Administrador&lt;/b&gt;&lt;br&gt;&lt;br&gt;Consulta el historial&lt;br&gt;unificado de devoluciones" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="390" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_fe" value="CAPA DE PRESENTACIÓN &#8212; Frontend&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;HTML5 + CSS3 + JavaScript (ES6)&lt;br&gt;Publicado en Vercel (CDN global, HTTPS automático)&lt;/font&gt;" style="swimlane;html=1;startSize=60;fillColor=#f0f7ff;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="290" y="110" width="250" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="a_fe1" value="&lt;b&gt;Portal del Cliente&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Lista pedidos elegibles, arma la solicitud y muestra el código&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="a_fe">
+          <mxGeometry x="20" y="75" width="210" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="a_fe2" value="&lt;b&gt;Módulo de Tienda&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Busca por código, muestra el detalle y registra aprobar/rechazar&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="a_fe">
+          <mxGeometry x="20" y="155" width="210" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="a_fe3" value="&lt;b&gt;Panel de Historial&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Consulta trazabilidad de las devoluciones&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="a_fe">
+          <mxGeometry x="20" y="235" width="210" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="a_fe4" value="&lt;b&gt;Cliente HTTP (fetch API)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Adjunta el token JWT en la cabecera Authorization y traduce los errores de la API&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#666666;fontSize=11;" vertex="1" parent="a_fe">
+          <mxGeometry x="20" y="305" width="210" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_be" value="CAPA DE LÓGICA DE NEGOCIO &#8212; Backend&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Python 3.11 + FastAPI + Uvicorn&lt;br&gt;API REST publicada en Render (HTTPS)&lt;/font&gt;" style="swimlane;html=1;startSize=60;fillColor=#f2fbf0;strokeColor=#82b366;fontSize=12;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="660" y="110" width="330" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="a_be1" value="&lt;b&gt;Capa de Rutas (API Router)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Expone los endpoints REST, valida la entrada con Pydantic y traduce excepciones a códigos HTTP&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;" vertex="1" parent="a_be">
+          <mxGeometry x="20" y="75" width="290" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="a_be2" value="&lt;b&gt;Servicio de Autenticación&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Login, emisión y validación de JWT (30 min), hash bcrypt y control de acceso por rol&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=11;" vertex="1" parent="a_be">
+          <mxGeometry x="20" y="155" width="290" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="a_be3" value="&lt;b&gt;Servicio de Elegibilidad&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Aplica las reglas R1 a R4: estado del pedido, ventana de 30 días, categorías excluidas y cantidades&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;" vertex="1" parent="a_be">
+          <mxGeometry x="20" y="235" width="290" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="a_be4" value="&lt;b&gt;Servicio de Devoluciones&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Máquina de estados, generación del código único de 72 h, cálculo del reembolso e historial de transiciones&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=11;" vertex="1" parent="a_be">
+          <mxGeometry x="20" y="315" width="290" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="a_be5" value="&lt;b&gt;Capa de Repositorios&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Acceso a datos con SQLAlchemy ORM y manejo de transacciones&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#666666;fontSize=11;" vertex="1" parent="a_be">
+          <mxGeometry x="20" y="400" width="290" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_db" value="&lt;b&gt;CAPA DE PERSISTENCIA&lt;/b&gt;&lt;br&gt;&lt;b&gt;PostgreSQL (Neon)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;usuario · pedido · item_pedido&lt;br&gt;solicitud_devolucion · item_devolucion&lt;br&gt;historial_estado&lt;/font&gt;" style="shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=15;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="200" width="230" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_ext" value="&lt;b&gt;Fuera del alcance del MVP&lt;/b&gt;&lt;br&gt;&lt;br&gt;Pasarela de pagos y ERP&lt;br&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;El MVP deja el reembolso en estado &quot;autorizado&quot; y expone el monto calculado; no mueve dinero&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="430" width="230" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ae1" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="a_cli" target="a_fe1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae2" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="a_ase" target="a_fe2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae3" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="a_adm" target="a_fe3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae4" value="&lt;b&gt;HTTPS / REST sobre JSON&lt;/b&gt;&lt;br&gt;Authorization: Bearer (JWT)&lt;br&gt;CORS restringido al dominio del frontend&lt;br&gt;&lt;br&gt;Envía: credenciales, ítems, cantidades, motivo, código&lt;br&gt;Recibe: pedidos elegibles, código, estado, historial, errores" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=3;fontSize=10;strokeColor=#3333cc;" edge="1" parent="1" source="a_fe4" target="a_be1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae5" value="valida token y rol" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="a_be1" target="a_be2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae6" value="consulta reglas" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="a_be1" target="a_be3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae7" value="orquesta" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="a_be1" target="a_be4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae8" value="valida elegibilidad" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="a_be4" target="a_be3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae9" value="persiste" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="a_be4" target="a_be5"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae10" value="&lt;b&gt;SQL sobre TCP con TLS&lt;/b&gt;&lt;br&gt;Credenciales en variables de entorno" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=3;fontSize=10;strokeColor=#d79b00;" edge="1" parent="1" source="a_be5" target="a_db"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae11" value="Integración futura" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;dashed=1;fontSize=10;strokeColor=#999999;" edge="1" parent="1" source="a_be4" target="a_ext"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <mxCell id="a_seg" value="&lt;b&gt;Mecanismos de seguridad transversales&lt;/b&gt;&lt;br&gt;&lt;br&gt;• HTTPS/TLS de extremo a extremo (certificados gestionados por Vercel y Render)&lt;br&gt;• Autenticación por token JWT firmado, con expiración de 30 minutos&lt;br&gt;• Autorización por rol: CLIENTE, ASESOR y ADMIN (dependencia de FastAPI en cada endpoint)&lt;br&gt;• Contraseñas almacenadas con hash bcrypt, nunca en texto plano&lt;br&gt;• Validación de toda la entrada con esquemas Pydantic antes de tocar la lógica de negocio&lt;br&gt;• CORS restringido exclusivamente al dominio del frontend&lt;br&gt;• Secretos (clave JWT y cadena de conexión) en variables de entorno, fuera del repositorio" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;fillColor=#fff7f7;strokeColor=#b85450;fontSize=11;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="620" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="a_tec" value="&lt;b&gt;Justificación de las decisiones tecnológicas&lt;/b&gt;&lt;br&gt;&lt;br&gt;• &lt;b&gt;FastAPI:&lt;/b&gt; valida datos automáticamente con Pydantic y genera documentación interactiva (/docs), útil en la sustentación.&lt;br&gt;• &lt;b&gt;PostgreSQL:&lt;/b&gt; el flujo exige transacciones e integridad referencial; una devolución no puede quedar a medias.&lt;br&gt;• &lt;b&gt;Neon:&lt;/b&gt; PostgreSQL gestionado con capa gratuita que conserva los datos, a diferencia de SQLite en Render.&lt;br&gt;• &lt;b&gt;Backend monolítico modular:&lt;/b&gt; un solo despliegue para el MVP, pero con los servicios ya separados para poder extraerlos a microservicios sin reescribir la lógica.&lt;br&gt;• &lt;b&gt;Frontend estático separado:&lt;/b&gt; permite que la app móvil futura consuma exactamente la misma API." style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;fillColor=#f7fff7;strokeColor=#82b366;fontSize=11;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="690" y="620" width="650" height="200" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
