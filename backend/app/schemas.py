@@ -11,6 +11,18 @@ from decimal import Decimal
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
+class RegistroEntrada(BaseModel):
+    """Lo que acepta el formulario publico.
+
+    No hay campo de rol, y es deliberado: aunque alguien envie uno en el JSON,
+    Pydantic lo descarta antes de que llegue a la logica de negocio.
+    """
+    nombre: str = Field(min_length=3, max_length=120)
+    email: EmailStr
+    documento: str = Field(min_length=6, max_length=20)
+    password: str = Field(min_length=8, max_length=128)
+
+
 class LoginEntrada(BaseModel):
     email: EmailStr
     password: str = Field(min_length=4, max_length=128)

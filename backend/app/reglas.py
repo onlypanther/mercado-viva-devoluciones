@@ -153,3 +153,59 @@ def validar_transicion(estado_actual: str, estado_nuevo: str) -> None:
 def calcular_monto(lineas: list[tuple[int, Decimal]]) -> Decimal:
     total = sum((Decimal(c) * Decimal(p) for c, p in lineas), Decimal("0"))
     return total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+
+# =========================================================================
+# Reglas de la cuenta de usuario
+# =========================================================================
+LONGITUD_MINIMA_PASSWORD = 8
+ROL_POR_DEFECTO = "CLIENTE"
+ROLES_VALIDOS = frozenset({"CLIENTE", "ASESOR", "ADMIN"})
+
+
+def normalizar_email(email: str) -> str:
+    """El correo identifica la cuenta, asi que se guarda siempre igual.
+
+    Sin esto, 'Ana@viva.co' y 'ana@viva.co' serian dos cuentas distintas y el
+    usuario no entenderia por que no puede entrar con su propio correo.
+    """
+    return email.strip().lower()
+
+
+def validar_password(password: str) -> None:
+    """R8: la contrasena debe resistir un intento de adivinanza basico.
+
+    No se exigen simbolos ni mayusculas a proposito: las reglas complicadas
+    empujan a la gente a escribir la clave en un papel, que es peor.
+    """
+    if len(password) < LONGITUD_MINIMA_PASSWORD:
+        raise ReglaNegocioError(
+            f"La contrasena debe tener al menos {LONGITUD_MINIMA_PASSWORD} caracteres.",
+            regla="R8")
+    if not any(c.isalpha() for c in password):
+        raise ReglaNegocioError(
+            "La contrasena debe incluir al menos una letra.", regla="R8")
+    if not any(c.isdigit() for c in password):
+        raise ReglaNegocioError(
+            "La contrasena debe incluir al menos un numero.", regla="R8")
+
+
+def validar_documento(documento: str) -> str:
+    limpio = documento.strip().replace(".", "").replace(" ", "")
+    if not limpio.isdigit():
+        raise ReglaNegocioError(
+            "El documento debe contener solo numeros.", regla="R8")
+    if not 6 <= len(limpio) <= 15:
+        raise ReglaNegocioError(
+            "El documento debe tener entre 6 y 15 digitos.", regla="R8")
+    return limpio
+
+
+def rol_para_registro_publico() -> str:
+    """R9: el rol NUNCA llega desde el formulario.
+
+    Si el cliente pudiera elegir su rol al registrarse, cualquiera se
+    registraria como ASESOR y podria aprobar sus propias devoluciones. El
+    servidor asigna CLIENTE y descarta lo que venga en la peticion.
+    """
+    return ROL_POR_DEFECTO

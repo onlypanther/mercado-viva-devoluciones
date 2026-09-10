@@ -43,6 +43,12 @@ class TransicionInvalida(ErrorDominio):
     tipo = "transicion_invalida"
 
 
+class CorreoYaRegistrado(ErrorDominio):
+    """Ya existe una cuenta con ese correo."""
+    codigo_http = 409
+    tipo = "correo_duplicado"
+
+
 class CredencialesInvalidas(ErrorDominio):
     codigo_http = 401
     tipo = "credenciales_invalidas"

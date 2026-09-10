@@ -1,20 +1,42 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from .. import reglas as R
 from ..config import config
 from ..database import obtener_sesion
 from ..errors import CredencialesInvalidas
 from ..models import Usuario
-from ..schemas import LoginEntrada, TokenSalida, UsuarioSalida
+from ..schemas import (LoginEntrada, RegistroEntrada, TokenSalida,
+                       UsuarioSalida)
 from ..security import crear_token, usuario_actual, verificar_password
+from ..services import usuarios as servicio_usuarios
 
 router = APIRouter(prefix="/api/auth", tags=["Autenticacion"])
 
 
+@router.post("/registro", response_model=TokenSalida,
+             status_code=status.HTTP_201_CREATED)
+def registro(datos: RegistroEntrada, sesion: Session = Depends(obtener_sesion)):
+    """Crea una cuenta de cliente y devuelve la sesion ya iniciada.
+
+    Devolver el token aqui evita obligar al usuario a escribir sus datos dos
+    veces seguidas. El rol lo asigna el servicio, no la peticion (regla R9).
+    """
+    usuario = servicio_usuarios.registrar_cliente(
+        sesion, datos.nombre, datos.email, datos.documento, datos.password)
+
+    return TokenSalida(
+        access_token=crear_token(usuario),
+        expira_en_minutos=config.JWT_MINUTOS_EXPIRACION,
+        usuario=UsuarioSalida.model_validate(usuario),
+    )
+
+
 @router.post("/login", response_model=TokenSalida)
 def login(datos: LoginEntrada, sesion: Session = Depends(obtener_sesion)):
-    usuario = sesion.scalar(select(Usuario).where(Usuario.email == datos.email.lower()))
+    usuario = sesion.scalar(
+        select(Usuario).where(Usuario.email == R.normalizar_email(datos.email)))
     # El mismo mensaje para usuario inexistente y clave equivocada: decir cual
     # de los dos fallo permitiria averiguar que correos estan registrados.
     if usuario is None or not verificar_password(datos.password, usuario.hash_password):

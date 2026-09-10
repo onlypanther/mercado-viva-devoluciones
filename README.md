@@ -48,6 +48,8 @@ queda cerrada, con el reembolso autorizado y su historial de estados completo.
 | R5 | Cada solicitud genera un código único con vigencia de 72 horas |
 | R6 | Solo un usuario con rol `ASESOR` puede aprobar o rechazar |
 | R7 | Toda transición se registra con usuario, fecha y motivo; los estados no retroceden |
+| R8 | El correo identifica la cuenta; la contraseña exige 8 caracteres con letra y número |
+| R9 | El rol se asigna en el servidor: el registro público solo crea cuentas `CLIENTE` |
 
 **Restricciones del caso.**
 
@@ -106,13 +108,18 @@ está separado en capas que no se saltan entre sí.
 |---|---|
 | `app/routers/` | Exponen los endpoints REST y validan la entrada |
 | `app/security.py` | Emite y valida los JWT; controla el acceso por rol |
-| `app/reglas.py` | Las siete reglas del negocio. **Sin dependencias externas** |
+| `app/reglas.py` | Las nueve reglas del negocio. **Sin dependencias externas** |
 | `app/services/devoluciones.py` | Máquina de estados y orquestación del flujo |
 | `app/models.py` | Las seis tablas |
 
 `app/reglas.py` no importa FastAPI ni SQLAlchemy. Esa restricción es deliberada: permite
 probar las reglas del negocio sin levantar la base de datos ni el servidor, que es lo que
 exige el requisito no funcional RNF-03.
+
+`app/muestras.py` simula el Sistema de Pedidos externo que aparece en el diagrama de
+arquitectura. Cuando un cliente se registra, se le genera un historial de compras como si
+llegara de la plataforma. En producción este módulo desaparece y los pedidos llegan por
+integración.
 
 **Mecanismos de seguridad.** HTTPS de extremo a extremo · JWT con expiración de 30 minutos ·
 contraseñas con hash bcrypt · autorización por rol en cada endpoint · validación de toda la
@@ -164,15 +171,19 @@ python -m http.server 5500
 Abra `http://127.0.0.1:5500`. No abra los archivos con doble clic: el navegador bloquea
 las peticiones desde `file://`.
 
-### Cuentas de demostración
+### Cuentas
 
-Las tres usan la contraseña `Viva2026*`.
+Cualquiera puede **crear una cuenta de cliente** desde la propia aplicación. Al
+registrarse recibe un historial de compras simulado, porque en el MVP el
+Sistema de Pedidos es un actor externo que no está integrado.
 
-| Correo | Rol | Qué ve |
-|---|---|---|
-| `cliente@viva.co` | CLIENTE | Sus pedidos y sus solicitudes |
-| `asesor@viva.co` | ASESOR | El módulo de tienda |
-| `admin@viva.co` | ADMIN | El historial unificado |
+Las cuentas internas (`ASESOR` y `ADMIN`) **no se crean desde el formulario
+público**. Se cargan con `python -m app.seed` y en producción las crearía el
+área de operaciones. Esta separación es deliberada: si el registro permitiera
+elegir el rol, cualquiera podría aprobar sus propias devoluciones.
+
+Las cuentas de demostración que carga el `seed` están documentadas en
+`app/seed.py`. No se muestran en la interfaz.
 
 ---
 
@@ -197,6 +208,9 @@ Cuatro de ellas son casos excepcionales, que es lo que pide el taller:
 | Devolver un producto perecedero | 422 con la regla R3 |
 | Consultar un código vencido | 410, y la solicitud queda `EXPIRADA` |
 | Aprobar dos veces la misma solicitud | 409, y el estado no cambia |
+| Registrarse con un correo ya existente | 409, y no se crea un segundo usuario |
+| Registrarse con contraseña débil | 422 con la regla R8 |
+| Intentar registrarse como `ASESOR` | 201, pero la cuenta queda como `CLIENTE` |
 
 Cada una verifica además que la operación fallida no dejó registros a medias en la base
 de datos.
@@ -207,6 +221,7 @@ de datos.
 
 | Método | Ruta | Rol | Historia |
 |---|---|---|---|
+| `POST` | `/api/auth/registro` | — | Registro de clientes |
 | `POST` | `/api/auth/login` | — | Autenticación |
 | `GET` | `/api/auth/me` | cualquiera | Perfil |
 | `GET` | `/api/pedidos/elegibles` | CLIENTE | HU-01 |

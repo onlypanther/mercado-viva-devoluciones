@@ -226,3 +226,95 @@ def test_solicitud_sin_items_se_rechaza(cliente_http, datos, cabecera_cliente):
 def test_health_responde_sin_autenticacion(cliente_http):
     r = cliente_http.get("/api/health")
     assert r.status_code == 200 and r.json()["estado"] == "ok"
+
+
+# =========================================================================
+# REGISTRO DE CLIENTES
+# =========================================================================
+DATOS_NUEVOS = {
+    "nombre": "Laura Gomez Villa",
+    "documento": "1098765432",
+    "email": "laura@correo.com",
+    "password": "Laura2026",
+}
+
+
+def test_registro_crea_la_cuenta_y_devuelve_sesion(cliente_http, datos):
+    r = cliente_http.post("/api/auth/registro", json=DATOS_NUEVOS)
+    assert r.status_code == 201
+
+    cuerpo = r.json()
+    assert cuerpo["usuario"]["rol"] == "CLIENTE"
+    assert cuerpo["usuario"]["email"] == "laura@correo.com"
+    assert cuerpo["access_token"]
+
+    # La sesion que devuelve sirve de inmediato: no hay que volver a entrar.
+    cabecera = {"Authorization": f"Bearer {cuerpo['access_token']}"}
+    assert cliente_http.get("/api/auth/me", headers=cabecera).status_code == 200
+
+
+def test_el_cliente_nuevo_recibe_su_historial_de_pedidos(cliente_http, datos):
+    """El Sistema de Pedidos simulado le entrega cuatro pedidos, de los cuales
+    solo dos son elegibles. Comprueba que el filtro funciona para cualquier
+    cliente, no solo para el de demostracion."""
+    token = cliente_http.post("/api/auth/registro", json=DATOS_NUEVOS).json()["access_token"]
+    cabecera = {"Authorization": f"Bearer {token}"}
+
+    r = cliente_http.get("/api/pedidos/elegibles", headers=cabecera)
+    assert r.status_code == 200
+    assert len(r.json()) == 2
+
+
+def test_el_correo_no_distingue_mayusculas(cliente_http, datos):
+    cliente_http.post("/api/auth/registro", json=DATOS_NUEVOS)
+    r = cliente_http.post("/api/auth/login",
+                          json={"email": "LAURA@CORREO.COM", "password": "Laura2026"})
+    assert r.status_code == 200
+
+
+# --- Casos excepcionales del registro ------------------------------------
+def test_excepcion_correo_ya_registrado(cliente_http, datos, sesion):
+    from app.models import Usuario
+    cliente_http.post("/api/auth/registro", json=DATOS_NUEVOS)
+    antes = sesion.query(Usuario).count()
+
+    r = cliente_http.post("/api/auth/registro", json=DATOS_NUEVOS)
+    assert r.status_code == 409
+    assert r.json()["tipo"] == "correo_duplicado"
+    assert sesion.query(Usuario).count() == antes
+
+
+def test_excepcion_password_debil(cliente_http, datos):
+    r = cliente_http.post("/api/auth/registro",
+                          json={**DATOS_NUEVOS, "password": "sololetras"})
+    assert r.status_code == 422
+    assert r.json()["regla"] == "R8"
+
+
+def test_excepcion_documento_no_numerico(cliente_http, datos):
+    r = cliente_http.post("/api/auth/registro",
+                          json={**DATOS_NUEVOS, "documento": "abc123456"})
+    assert r.status_code == 422
+
+
+# --- La prueba de seguridad mas importante del registro ------------------
+def test_no_se_puede_autoasignar_el_rol_de_asesor(cliente_http, datos, sesion):
+    """R9. Aunque la peticion incluya un rol, el servidor lo ignora.
+
+    Sin esta garantia, cualquiera se registraria como ASESOR y podria aprobar
+    sus propias devoluciones.
+    """
+    from app.models import Usuario
+
+    r = cliente_http.post("/api/auth/registro",
+                          json={**DATOS_NUEVOS, "rol": "ASESOR"})
+    assert r.status_code == 201
+    assert r.json()["usuario"]["rol"] == "CLIENTE"
+
+    guardado = sesion.query(Usuario).filter_by(email="laura@correo.com").one()
+    assert guardado.rol == "CLIENTE"
+
+    # Y en la practica: no puede entrar al modulo de tienda.
+    cabecera = {"Authorization": f"Bearer {r.json()['access_token']}"}
+    assert cliente_http.get("/api/devoluciones/codigo/DEV-CUALQUIER",
+                            headers=cabecera).status_code == 403

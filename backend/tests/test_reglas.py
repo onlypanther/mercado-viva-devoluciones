@@ -105,3 +105,47 @@ def test_los_estados_finales_no_admiten_cambios(origen, destino):
 def test_calculo_del_monto_redondea_a_dos_decimales():
     assert R.calcular_monto([(2, Decimal("15900.50")), (1, Decimal("8000"))]) == Decimal("39801.00")
     assert R.calcular_monto([]) == Decimal("0.00")
+
+
+# =========================================================================
+# R8 y R9: reglas de la cuenta de usuario
+# =========================================================================
+@pytest.mark.parametrize("password,motivo", [
+    ("Abc123", "muy corta"),
+    ("solamenteletras", "sin numeros"),
+    ("12345678", "sin letras"),
+    ("", "vacia"),
+])
+def test_passwords_invalidas_se_rechazan(password, motivo):
+    with pytest.raises(ReglaNegocioError) as error:
+        R.validar_password(password)
+    assert error.value.regla == "R8"
+
+
+@pytest.mark.parametrize("password", ["Viva2026", "clave1234", "a1bcdefgh"])
+def test_passwords_validas_pasan(password):
+    R.validar_password(password)
+
+
+def test_el_correo_se_normaliza_a_minusculas():
+    assert R.normalizar_email("  Ana@VIVA.co ") == "ana@viva.co"
+
+
+@pytest.mark.parametrize("entrada,esperado", [
+    ("1017234567", "1017234567"),
+    ("1.017.234.567", "1017234567"),
+    (" 71234567 ", "71234567"),
+])
+def test_el_documento_se_limpia(entrada, esperado):
+    assert R.validar_documento(entrada) == esperado
+
+
+@pytest.mark.parametrize("documento", ["12345", "abc123456", "1234567890123456"])
+def test_documentos_invalidos_se_rechazan(documento):
+    with pytest.raises(ReglaNegocioError):
+        R.validar_documento(documento)
+
+
+def test_el_registro_publico_siempre_crea_clientes():
+    """R9. Si esta prueba falla, cualquiera podria registrarse como asesor."""
+    assert R.rol_para_registro_publico() == "CLIENTE"

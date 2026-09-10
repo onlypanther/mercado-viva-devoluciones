@@ -1,4 +1,4 @@
 /* Unico archivo que hay que tocar al desplegar.
-   En local dejelo como esta. En Vercel, reemplace por la URL de Render. */
+   Para trabajar contra un backend local, cambie a http://127.0.0.1:8000
+   y DEVUELVA esta linea antes de hacer commit. */
 const API = "https://mercado-viva-devoluciones.onrender.com";
-// const API = "https://mercado-viva-api.onrender.com";
